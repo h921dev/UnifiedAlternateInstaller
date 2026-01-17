@@ -1,3 +1,41 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using UnifiedAlternateInstaller.Hardware;
+using UnifiedAlternateInstaller.Core;
 
-Console.WriteLine("Hello, World!");
+static class Program
+{
+    static string version = "1.0.0";
+    static bool hasInitialized = false;
+    
+    static void showIntroCard()
+    {
+        GeneralHandler.WriteColored("=============================", ConsoleColor.Red);
+        GeneralHandler.WriteColored("Unified Alternate Installer", ConsoleColor.Red);
+        GeneralHandler.WriteColored($"Version: {version}", ConsoleColor.Red);
+        GeneralHandler.WriteColored("with <3 from h921.cc", ConsoleColor.Red);
+        GeneralHandler.WriteColored("=============================", ConsoleColor.Red);
+    }
+
+    static void initializer()
+    {
+        GeneralHandler.WriteColored("Initializing...", ConsoleColor.Gray);
+        GeneralHandler.CheckUAIFolder();
+        GeneralHandler.WriteColored("Initialized!", ConsoleColor.Gray);
+        Thread.Sleep(1000);
+        showIntroCard();
+    }
+    static void Main(string[] args)
+    {
+        initializer();
+        bool hasIntel = false;
+        bool hasNvidia = false;
+        bool hasAmd = false;
+        List<(string Name, string Vendor, string PciId)> GotGPUs = GpuDetector.GetGpus();
+        for (int i = 0; i < GotGPUs.Count; i++)
+        {
+            GeneralHandler.WriteColored($"New GPU detected! -> {GotGPUs[i].Name}", ConsoleColor.Green);
+            if (GotGPUs[i].Vendor == "INTEL") hasIntel = true;
+            if (GotGPUs[i].Vendor == "NVIDIA") hasNvidia = true;
+            if (GotGPUs[i].Vendor == "AMD") hasAmd = true;
+        }
+    }
+}
