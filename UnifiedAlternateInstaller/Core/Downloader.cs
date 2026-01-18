@@ -11,11 +11,12 @@ public class Downloader
     private static readonly HttpClient client = new HttpClient();
     static string getDownloadUrl(string application)
     {
-        string[] applicationNames = { "NvidiaDriver", "AmdDriver" };
+        string[] applicationNames = { "NvidiaDriver", "AmdDriver", "IntelChipsets" };
         string[] applicationURLs =
         {
             "https://uk.download.nvidia.com/nvapp/client/11.0.6.379/NVIDIA_app_v11.0.6.379.exe",
-            "https://drivers.amd.com/drivers/installer/25.20/whql/amd-software-adrenalin-edition-25.12.1-minimalsetup-251207_web.exe"
+            "https://drivers.amd.com/drivers/installer/25.20/whql/amd-software-adrenalin-edition-25.12.1-minimalsetup-251207_web.exe",
+            "https://downloadmirror.intel.com/872506/SetupChipset.exe"
 
         };
         for (int i=0;i<applicationNames.Length;i++)
@@ -32,7 +33,7 @@ public class Downloader
             response.EnsureSuccessStatusCode();
 
             using var stream = await response.Content.ReadAsStreamAsync();
-            using var fileStream = new FileStream($"{GetTempPath()}\\UAI\\{fileName}",FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+            using var fileStream = new FileStream($"{GetTempPath()}\\UAI\\{fileName}.exe",FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
 
             await stream.CopyToAsync(fileStream);
             return true;

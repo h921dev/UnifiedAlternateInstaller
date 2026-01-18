@@ -7,7 +7,7 @@ public class InvokeExecutable
     static void Invoker(string application = "", string args = "")
     {
         if (application == "") return;
-        string finalLocation = $"%TEMP%\\UAI\\{application}";
+        string finalLocation = $"%TEMP%\\UAI\\{application}.exe";
         if (!File.Exists(finalLocation))
         {
             Console.ForegroundColor = ConsoleColor.Red;

@@ -26,16 +26,22 @@ static class Program
     static void Main(string[] args)
     {
         initializer();
-        bool hasIntel = false;
-        bool hasNvidia = false;
-        bool hasAmd = false;
+        List<string> toInstall = new List<string>();
         List<(string Name, string Vendor, string PciId)> GotGPUs = GpuDetector.GetGpus();
         for (int i = 0; i < GotGPUs.Count; i++)
         {
             GeneralHandler.WriteColored($"New GPU detected! -> {GotGPUs[i].Name}", ConsoleColor.Green);
-            if (GotGPUs[i].Vendor == "INTEL") hasIntel = true;
-            if (GotGPUs[i].Vendor == "NVIDIA") hasNvidia = true;
-            if (GotGPUs[i].Vendor == "AMD") hasAmd = true;
+            if (GotGPUs[i].Vendor == "NVIDIA") toInstall.Add("NvidiaDriver");
+            if (GotGPUs[i].Vendor == "AMD") toInstall.Add("AmdDriver");
         }
+
+        if (CpuDetector.GetCpuVendor() == "INTEL")
+        {
+            GeneralHandler.WriteColored("Intel CPU detected!", ConsoleColor.Green);
+            toInstall.Add("IntelChipsets");
+        }
+        
+        
+        
     }
 }
